@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenida</title>
+    <style>
+        body {
+            background: linear-gradient(to bottom, black, #6a4c9c);
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        .welcome-container {
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 10px;
+            z-index: 2;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #6a4c9c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .button-red {
+            background-color: red;
+        }
+        /* Barra de carga */
+        .progress-bar-container {
+            width: 80%;
+            height: 30px;
+            background-color: #444;
+            border-radius: 15px;
+            margin-top: 20px;
+            display: none;
+        }
+        .progress-bar {
+            height: 100%;
+            width: 0;
+            background-color: red;
+            border-radius: 15px;
+        }
+        /* Animación de flores */
+        .flower {
+            position: absolute;
+            bottom: -50px;
+            width: 20px;
+            height: 20px;
+            background-color: pink;
+            border-radius: 50%;
+            animation: float 6s infinite ease-in-out;
+        }
+        @keyframes float {
+            0% { transform: translateY(0); opacity: 0.7; }
+            100% { transform: translateY(-100vh); opacity: 0; }
+        }
+        /* Pantalla intermedia */
+        .intermediate-screen {
+            display: none;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 30px;
+            border-radius: 10px;
+            z-index: 2;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="welcome-container">
+        <h2>¡Bienvenida, Sarita!</h2>
+        <p>¿Ven acompañame?</p>
+        <button onclick="showSureQuestion()">Sí</button>
+    </div>
+
+    <!-- Barra de carga -->
+    <div class="progress-bar-container">
+        <div class="progress-bar" id="progress-bar"></div>
+    </div>
+
+    <!-- Pantalla intermedia después de hacer clic en "Sí" -->
+    <div class="intermediate-screen" id="intermediate-screen">
+        <h2>¿Estás segurísima?</h2>
+        <button onclick="showThanksMessage()">Sí</button>
+    </div>
+
+    <!-- Pantalla de gracias -->
+    <div class="thank-you-screen" id="thank-you-screen" style="display:none;">
+        <h2>Gracias por todo mi niña bonita, te quiero muchísimo, de aquí a la luna, mi Sarita hermosa</h2>
+        <button onclick="showNextQuestion()">Siguiente</button>
+    </div>
+
+    <script>
+        function createFlowers() {
+            for (let i = 0; i < 50; i++) {
+                let flower = document.createElement('div');
+                flower.classList.add('flower');
+                flower.style.left = Math.random() * 100 + 'vw'; // Posición aleatoria en el eje X
+                flower.style.animationDuration = Math.random() * 6 + 4 + 's'; // Duración aleatoria
+                document.body.appendChild(flower);
+            }
+        }
+
+        function showSureQuestion() {
+            createFlowers();  // Generar flores
+
+            // Ocultar la primera pregunta
+            document.querySelector('.welcome-container').innerHTML = `
+                <h2>¿Estás segurísima?</h2>
+                <button onclick="showThanksMessage()">Sí</button>
+            `;
+        }
+
+        function showThanksMessage() {
+            // Ocultar la pregunta de "Estás segurísima"
+            document.querySelector('.intermediate-screen').style.display = 'none';
+
+            // Mostrar el mensaje de agradecimiento
+            document.querySelector('#thank-you-screen').style.display = 'block';
+        }
+
+        function showNextQuestion() {
+            // Ocultar la pantalla de agradecimiento
+            document.querySelector('#thank-you-screen').style.display = 'none';
+
+            // Mostrar la pregunta "Me dejas ser tu novio?"
+            document.querySelector('.welcome-container').innerHTML = `
+                <h2>Me dejas ser tu novio?</h2>
+                <button class="button-red" onclick="startLoading()">Sí</button>
+                <button class="button-red" onclick="startLoading()">Sí</button>
+            `;
+        }
+
+        function startLoading() {
+            // Mostrar la barra de carga
+            document.querySelector('.progress-bar-container').style.display = 'block';
+            
+            let progress = 0;
+            let progressBar = document.getElementById('progress-bar');
+            let interval = setInterval(function() {
+                progress += 2;
+                progressBar.style.width = progress + '%';
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    window.location.href = "https://youtu.be/K88ZUP9LkGE?si=QAA1RYKD8VTN9jnF"; // Redirigir al video
+                }
+            }, 100);
+        }
+    </script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+

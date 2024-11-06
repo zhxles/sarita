@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio de sesión</title>
+    <style>
+        body {
+            background: linear-gradient(to bottom, black, #6a4c9c); /* Fondo negro con lila */
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            position: relative;
+        }
+        .login-container {
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.7); /* Fondo con transparencia */
+            padding: 30px;
+            border-radius: 10px;
+            z-index: 2;
+        }
+        input {
+            padding: 10px;
+            margin: 10px;
+            border-radius: 5px;
+            border: none;
+            width: 200px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #6a4c9c; /* Lila para el botón */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+        /* Animación de los corazones */
+        .heart {
+            position: absolute;
+            bottom: -50px;
+            width: 30px;
+            height: 30px;
+            background-color: red;
+            clip-path: polygon(50% 0%, 100% 35%, 75% 100%, 50% 75%, 25% 100%, 0% 35%);
+            animation: float 7s infinite ease-in-out;
+            z-index: 1;
+            opacity: 0.8;
+        }
+        @keyframes float {
+            0% { transform: translateY(0); opacity: 0.7; }
+            100% { transform: translateY(-100vh); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- YouTube Player API -->
+    <div id="player"></div>
+
+    <div class="login-container">
+        <h2>Iniciar sesión</h2>
+        <form id="login-form">
+            <input type="text" id="username" placeholder="Usuario" required><br>
+            <input type="password" id="password" placeholder="Contraseña" required><br>
+            <button type="submit">Iniciar sesión</button>
+            <p id="error-message" class="error"></p>
+        </form>
+    </div>
+
+    <!-- Corazones cayendo -->
+    <script>
+        function createHearts() {
+            for (let i = 0; i < 30; i++) {
+                let heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.style.left = Math.random() * 100 + 'vw'; // Posición aleatoria en el eje X
+                heart.style.animationDuration = Math.random() * 3 + 4 + 's'; // Duración aleatoria de caída
+                document.body.appendChild(heart);
+            }
+        }
+
+        // Llamar a la función para crear los corazones cuando la página se cargue
+        createHearts();
+
+        // Función de inicio de sesión
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Verificar el usuario y la contraseña
+            if (username === "Sarita" && password === "2012") {
+                // Redirigir al siguiente paso si el inicio de sesión es correcto
+                localStorage.setItem('musicPlaying', 'true'); // Guardamos que la música sigue sonando
+                window.location.href = "bienvenida.html";
+            } else {
+                // Mostrar mensaje de error si el usuario o contraseña es incorrecto
+                document.getElementById('error-message').textContent = "Usuario o contraseña incorrectos.";
+            }
+        });
+
+        // Función para cargar el reproductor de YouTube
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '0',
+                width: '0',
+                videoId: 'EvnSN2BczH8', // ID del video de YouTube
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            if (localStorage.getItem('musicPlaying') === 'true') {
+                event.target.playVideo();  // Reproduce el video automáticamente cuando está listo
+                event.target.setVolume(100); // Asegurarse de que el volumen esté al 100%
+            }
+        }
+
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.ENDED) {
+                player.seekTo(0);  // Si el video termina, lo reinicia
+                player.playVideo();
+            }
+        }
+    </script>
+
+</body>
+</html>
+
+
+
+
